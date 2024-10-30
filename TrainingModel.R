@@ -57,3 +57,24 @@ sd(bootstrap_means)    # Standard deviation of the bootstrap sample means
 hist(bootstrap_means, main = "Bootstrap Distribution of Sales Mean",
      xlab = "Mean Sales", col = "lightblue", border = "black")
 
+# Load necessary libraries
+library(caret)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define the number of folds for cross-validation
+k <- 5
+
+# Create the training control
+train_control <- trainControl(method = "cv", number = k)
+
+# Fit a linear model (you can change this to any model of your choice)
+model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budget, 
+               data = AdData, 
+               method = "lm", 
+               trControl = train_control)
+
+# Display the results
+print(model)
+
