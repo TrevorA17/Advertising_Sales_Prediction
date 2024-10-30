@@ -30,3 +30,4 @@ test_data <- AdData[-train_indices, ]
 # Check the dimensions of the training and testing sets
 dim(train_data)
 dim(test_data)
+
