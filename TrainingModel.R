@@ -78,3 +78,38 @@ model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budget,
 # Display the results
 print(model)
 
+# Load necessary libraries
+library(caret)
+library(glmnet)      # For Lasso Regression
+library(randomForest) # For Random Forest Regression
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Create the training control
+train_control <- trainControl(method = "cv", number = 5)  # 5-fold cross-validation
+
+# 1. Linear Regression
+linear_model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budget, 
+                      data = AdData, 
+                      method = "lm", 
+                      trControl = train_control)
+
+# 2. Lasso Regression
+# Note: You need to standardize your data for Lasso Regression
+x <- as.matrix(AdData[, c("TV_Ad_Budget", "Radio_Ad_Budget", "Newspaper_Ad_Budget")])
+y <- AdData$Sales
+lasso_model <- cv.glmnet(x, y, alpha = 1) # alpha = 1 for Lasso
+lasso_model
+
+# 3. Random Forest Regression
+rf_model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budget, 
+                  data = AdData, 
+                  method = "rf", 
+                  trControl = train_control)
+
+# Display results for all models
+print(linear_model)
+print(lasso_model)
+print(rf_model)
+
