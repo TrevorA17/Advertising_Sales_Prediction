@@ -31,3 +31,29 @@ test_data <- AdData[-train_indices, ]
 dim(train_data)
 dim(test_data)
 
+# Set seed for reproducibility
+set.seed(123)
+
+# Number of bootstrap samples
+n_bootstrap <- 1000
+
+# Initialize a vector to store bootstrap sample means
+bootstrap_means <- numeric(n_bootstrap)
+
+# Perform bootstrapping
+for (i in 1:n_bootstrap) {
+  # Sample with replacement
+  sample_data <- AdData[sample(1:nrow(AdData), replace = TRUE), ]
+  
+  # Calculate the mean of Sales for the bootstrap sample
+  bootstrap_means[i] <- mean(sample_data$Sales)
+}
+
+# Display the results
+mean(bootstrap_means)  # Average of the bootstrap sample means
+sd(bootstrap_means)    # Standard deviation of the bootstrap sample means
+
+# Plot the bootstrap distribution
+hist(bootstrap_means, main = "Bootstrap Distribution of Sales Mean",
+     xlab = "Mean Sales", col = "lightblue", border = "black")
+
