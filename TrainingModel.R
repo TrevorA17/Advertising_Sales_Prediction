@@ -95,21 +95,33 @@ linear_model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budg
                       method = "lm", 
                       trControl = train_control)
 
-# 2. Lasso Regression
-# Note: You need to standardize your data for Lasso Regression
-x <- as.matrix(AdData[, c("TV_Ad_Budget", "Radio_Ad_Budget", "Newspaper_Ad_Budget")])
-y <- AdData$Sales
-lasso_model <- cv.glmnet(x, y, alpha = 1) # alpha = 1 for Lasso
-lasso_model
 
-# 3. Random Forest Regression
+# 2. Random Forest Regression
 rf_model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budget, 
                   data = AdData, 
                   method = "rf", 
                   trControl = train_control)
+
+
+# 3. Lasso Regression
+lasso_model <- train(Sales ~ TV_Ad_Budget + Radio_Ad_Budget + Newspaper_Ad_Budget,
+                     data = AdData,
+                     method = "glmnet",
+                     trControl = train_control,
+                     tuneGrid = expand.grid(alpha = 1, lambda = seq(0, 0.1, by = 0.01)))
 
 # Display results for all models
 print(linear_model)
 print(lasso_model)
 print(rf_model)
 
+# Combine the results from the models into a resamples object
+model_list <- resamples(list(Linear = linear_model, 
+                             Lasso = lasso_model, 
+                             RandomForest = rf_model))
+
+# Summary of the resamples
+summary(model_list)
+
+# Visualization of the performance comparison
+bwplot(model_list)  # Boxplot to compare RMSE and other metrics
