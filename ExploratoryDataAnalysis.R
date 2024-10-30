@@ -93,3 +93,88 @@ pairs(AdData[, c("TV_Ad_Budget", "Radio_Ad_Budget", "Newspaper_Ad_Budget", "Sale
 # Display correlation matrix
 cor_matrix
 
+# Load necessary library
+library(ggplot2)
+
+# Histogram for each variable
+ggplot(AdData, aes(x = TV_Ad_Budget)) +
+  geom_histogram(binwidth = 20, fill = "lightblue", color = "black") +
+  labs(title = "Distribution of TV Ad Budget", x = "TV Ad Budget", y = "Frequency")
+
+ggplot(AdData, aes(x = Radio_Ad_Budget)) +
+  geom_histogram(binwidth = 5, fill = "lightgreen", color = "black") +
+  labs(title = "Distribution of Radio Ad Budget", x = "Radio Ad Budget", y = "Frequency")
+
+ggplot(AdData, aes(x = Newspaper_Ad_Budget)) +
+  geom_histogram(binwidth = 10, fill = "lightcoral", color = "black") +
+  labs(title = "Distribution of Newspaper Ad Budget", x = "Newspaper Ad Budget", y = "Frequency")
+
+ggplot(AdData, aes(x = Sales)) +
+  geom_histogram(binwidth = 5, fill = "lightyellow", color = "black") +
+  labs(title = "Distribution of Sales", x = "Sales", y = "Frequency")
+
+# Boxplot for each variable
+ggplot(AdData, aes(y = TV_Ad_Budget)) + 
+  geom_boxplot(fill = "lightblue") + 
+  labs(title = "Boxplot of TV Ad Budget", y = "TV Ad Budget")
+
+ggplot(AdData, aes(y = Radio_Ad_Budget)) + 
+  geom_boxplot(fill = "lightgreen") + 
+  labs(title = "Boxplot of Radio Ad Budget", y = "Radio Ad Budget")
+
+ggplot(AdData, aes(y = Newspaper_Ad_Budget)) + 
+  geom_boxplot(fill = "lightcoral") + 
+  labs(title = "Boxplot of Newspaper Ad Budget", y = "Newspaper Ad Budget")
+
+ggplot(AdData, aes(y = Sales)) + 
+  geom_boxplot(fill = "lightyellow") + 
+  labs(title = "Boxplot of Sales", y = "Sales")
+
+# Density plot for each variable
+ggplot(AdData, aes(x = TV_Ad_Budget)) + 
+  geom_density(fill = "lightblue") + 
+  labs(title = "Density Plot of TV Ad Budget", x = "TV Ad Budget")
+
+ggplot(AdData, aes(x = Radio_Ad_Budget)) + 
+  geom_density(fill = "lightgreen") + 
+  labs(title = "Density Plot of Radio Ad Budget", x = "Radio Ad Budget")
+
+ggplot(AdData, aes(x = Newspaper_Ad_Budget)) + 
+  geom_density(fill = "lightcoral") + 
+  labs(title = "Density Plot of Newspaper Ad Budget", x = "Newspaper Ad Budget")
+
+ggplot(AdData, aes(x = Sales)) + 
+  geom_density(fill = "lightyellow") + 
+  labs(title = "Density Plot of Sales", x = "Sales")
+
+# Scatter plots with regression line
+ggplot(AdData, aes(x = TV_Ad_Budget, y = Sales)) + 
+  geom_point(color = "blue") + 
+  geom_smooth(method = "lm", color = "red") + 
+  labs(title = "TV Ad Budget vs Sales", x = "TV Ad Budget", y = "Sales")
+
+ggplot(AdData, aes(x = Radio_Ad_Budget, y = Sales)) + 
+  geom_point(color = "green") + 
+  geom_smooth(method = "lm", color = "red") + 
+  labs(title = "Radio Ad Budget vs Sales", x = "Radio Ad Budget", y = "Sales")
+
+ggplot(AdData, aes(x = Newspaper_Ad_Budget, y = Sales)) + 
+  geom_point(color = "coral") + 
+  geom_smooth(method = "lm", color = "red") + 
+  labs(title = "Newspaper Ad Budget vs Sales", x = "Newspaper Ad Budget", y = "Sales")
+
+# Pairwise scatter plot matrix
+pairs(AdData[, c("TV_Ad_Budget", "Radio_Ad_Budget", "Newspaper_Ad_Budget", "Sales")], main = "Pairwise Scatter Plot Matrix")
+
+# Correlation heatmap
+library(reshape2)
+cor_data <- cor(AdData[, c("TV_Ad_Budget", "Radio_Ad_Budget", "Newspaper_Ad_Budget", "Sales")])
+melted_cor_data <- melt(cor_data)
+
+ggplot(data = melted_cor_data, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "red", high = "blue", mid = "white", midpoint = 0, limit = c(-1,1)) +
+  theme_minimal() +
+  labs(title = "Correlation Heatmap", x = "", y = "") +
+  geom_text(aes(label = round(value, 2)), color = "black", size = 4)
+
